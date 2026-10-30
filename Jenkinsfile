@@ -144,7 +144,7 @@ pipeline {
 }
         }
 
-        stage('Push to Docker Hub') {
+    
             // ch.5's secrets story, continued: the registry password lives in
             // neither the repo, the image, nor the log.
             //   - One-time UI step (like the plugins): Credentials > System >
