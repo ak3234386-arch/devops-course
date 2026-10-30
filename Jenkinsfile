@@ -167,15 +167,15 @@ pipeline {
             // substring, so no dash "Bad substitution" to trip over here.
             steps {
                 withCredentials([usernamePassword(credentialsId: 'docker-hub',
-                              usernameVariable: 'Ayesha56', passwordVariable: 'ayesha@565')]) {
+                              usernameVariable: 'ayesha56', passwordVariable: 'ayesha@565')]) {
                     sh """
-                        echo "\$Ayesha56" | docker login -u "\$Ayesha56" --password-stdin
-                        docker tag  notes-app:latest "\$Ayesha56/notes-app:\$BUILD_NUMBER"
-                        docker tag  notes-app:latest "\$Ayesha56/notes-app:${env.GIT_COMMIT.substring(0, 7)}"
-                        docker tag  notes-app:latest "\$Ayesha56/notes-app:latest"
-                        docker push "\$Ayesha56/notes-app:\$BUILD_NUMBER"
-                        docker push "\$Ayesha56/notes-app:${env.GIT_COMMIT.substring(0, 7)}"
-                        docker push "\$Ayesha56/notes-app:latest"
+                        echo "\$ayesha56" | docker login -u "\$ayesha56" --password-stdin
+                        docker tag  notes-app:latest "\$ayesha56/notes-app:\$BUILD_NUMBER"
+                        docker tag  notes-app:latest "\$ayesha56/notes-app:${env.GIT_COMMIT.substring(0, 7)}"
+                        docker tag  notes-app:latest "\$ayesha56/notes-app:latest"
+                        docker push "\$ayesha56/notes-app:\$BUILD_NUMBER"
+                        docker push "\$ayesha56/notes-app:${env.GIT_COMMIT.substring(0, 7)}"
+                        docker push "\$ayesha56/notes-app:latest"
                     """
                 }
             }
