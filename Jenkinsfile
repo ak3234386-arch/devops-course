@@ -132,10 +132,14 @@ pipeline {
             // seconds.
             steps {
     sh '''
-        docker save notes-app | docker run --rm -i \
+        docker run --rm \
+            -v /var/run/docker.sock:/var/run/docker.sock \
             -v trivy-cache:/root/.cache/trivy \
-            aquasec/trivy:latest image --input /dev/stdin \
-            --pkg-types library --severity CRITICAL --exit-code 1
+            aquasec/trivy:latest image \
+            --pkg-types library \
+            --severity CRITICAL \
+            --exit-code 1 \
+            notes-app:latest
     '''
 }
         }
