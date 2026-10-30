@@ -131,13 +131,13 @@ pipeline {
             // TRIVY_HOME on the jenkins_home volume, so later builds are
             // seconds.
             steps {
-                sh '''
-                    docker save notes-app -o /tmp/notes-app.tar
-                    trivy image --input /tmp/notes-app.tar \
-                        --pkg-types library --severity CRITICAL --exit-code 1
-                    rm -f /tmp/notes-app.tar
-                '''
-            }
+    sh '''
+        docker save notes-app | docker run --rm -i \
+            -v trivy-cache:/root/.cache/trivy \
+            aquasec/trivy:latest image --input /dev/stdin \
+            --pkg-types library --severity CRITICAL --exit-code 1
+    '''
+}
         }
 
         stage('Push to Docker Hub') {
@@ -163,15 +163,15 @@ pipeline {
             // substring, so no dash "Bad substitution" to trip over here.
             steps {
                 withCredentials([usernamePassword(credentialsId: 'docker-hub',
-                              usernameVariable: 'HUB_USER', passwordVariable: 'HUB_PASS')]) {
+                              usernameVariable: 'Ayesha56', passwordVariable: 'ayesha@565')]) {
                     sh """
-                        echo "\$HUB_PASS" | docker login -u "\$HUB_USER" --password-stdin
-                        docker tag  notes-app:latest "\$HUB_USER/notes-app:\$BUILD_NUMBER"
-                        docker tag  notes-app:latest "\$HUB_USER/notes-app:${env.GIT_COMMIT.substring(0, 7)}"
-                        docker tag  notes-app:latest "\$HUB_USER/notes-app:latest"
-                        docker push "\$HUB_USER/notes-app:\$BUILD_NUMBER"
-                        docker push "\$HUB_USER/notes-app:${env.GIT_COMMIT.substring(0, 7)}"
-                        docker push "\$HUB_USER/notes-app:latest"
+                        echo "\$Ayesha56" | docker login -u "\$Ayesha56" --password-stdin
+                        docker tag  notes-app:latest "\$Ayesha56/notes-app:\$BUILD_NUMBER"
+                        docker tag  notes-app:latest "\$Ayesha56/notes-app:${env.GIT_COMMIT.substring(0, 7)}"
+                        docker tag  notes-app:latest "\$Ayesha56/notes-app:latest"
+                        docker push "\$Ayesha56/notes-app:\$BUILD_NUMBER"
+                        docker push "\$Ayesha56/notes-app:${env.GIT_COMMIT.substring(0, 7)}"
+                        docker push "\$Ayesha56/notes-app:latest"
                     """
                 }
             }
