@@ -165,21 +165,23 @@ pipeline {
             // literal shell var at run time, while `${...}` is interpolated by
             // Groovy NOW. substring(0, 7) is the 7-char SHA - no shell
             // substring, so no dash "Bad substitution" to trip over here.
+                    stage('Push to Docker Hub') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'docker-hub',
-                              usernameVariable: 'ayesha56', passwordVariable: 'ayesha@565')]) {
-                    sh """
-                        echo "\$ayesha56" | docker login -u "\$ayesha56" --password-stdin
-                        docker tag  notes-app:latest "\$ayesha56/notes-app:\$BUILD_NUMBER"
-                        docker tag  notes-app:latest "\$ayesha56/notes-app:${env.GIT_COMMIT.substring(0, 7)}"
-                        docker tag  notes-app:latest "\$ayesha56/notes-app:latest"
-                        docker push "\$ayesha56/notes-app:\$BUILD_NUMBER"
-                        docker push "\$ayesha56/notes-app:${env.GIT_COMMIT.substring(0, 7)}"
-                        docker push "\$ayesha56/notes-app:latest"
-                    """
+                withCredentials([usernamePassword(
+                    credentialsId: 'docker-hub',
+                    usernameVariable: 'DOCKERHUB_USER',
+                    passwordVariable: 'DOCKERHUB_PASS'
+                )]) {
+                    sh '''
+                        echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USER" --password-stdin
+                        docker tag notes-app:latest "$DOCKERHUB_USER/pipline:latest"
+                        docker push "$DOCKERHUB_USER/pipline:latest"
+                    '''
                 }
             }
         }
+    }
+}
     }
 
     // `post` = lifecycle hooks that run after the body, whatever its
